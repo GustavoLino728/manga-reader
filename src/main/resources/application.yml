@@ -29,6 +29,16 @@ spring:
     virtual:
       enabled: true               # Virtual threads no Java 21
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: alpha
+    tags-sorter: alpha
+    display-request-duration: true
+  api-docs:
+    path: /v3/api-docs
+  show-actuator: false
+
 server:
   port: ${APP_PORT:8080}
 
