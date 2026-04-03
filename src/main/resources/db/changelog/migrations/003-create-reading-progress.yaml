@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-reading-progress
+      author: gustavo
+      changes:
+        - createTable:
+            tableName: reading_progress
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_progress_user
+                    references: users(id)
+                    deleteCascade: true
+              - column:
+                  name: manga_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: chapter_id
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: page
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: reading_progress
+            columnNames: user_id, manga_id
+            constraintName: uq_progress_user_manga
