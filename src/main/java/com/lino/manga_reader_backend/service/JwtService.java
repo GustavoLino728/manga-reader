@@ -1,6 +1,7 @@
 package com.lino.manga_reader_backend.service;
 
 import com.lino.manga_reader_backend.config.AppProperties;
+import com.lino.manga_reader_backend.domain.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class JwtService {
         );
     }
 
-    public String generateAccessToken(UserDetails user) {
+    public String generateAccessToken(User user) {
         return Jwts.builder()
-                .subject(user.getUsername())
+                .subject(user.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + props.jwt().expirationMs()))
                 .signWith(getKey())
@@ -41,9 +42,10 @@ public class JwtService {
                 .getSubject();
     }
 
-    public boolean isValid(String token, UserDetails user) {
+    public boolean isValid(String token, UserDetails userDetails) {
         try {
-            return extractUsername(token).equals(user.getUsername());
+            User user = (User) userDetails;
+            return extractUsername(token).equals(user.getEmail());
         } catch (JwtException e) {
             return false;
         }
