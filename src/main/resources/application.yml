@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: manga-reader
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/mangareader}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate          # Liquibase controla o schema, JPA só valida
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+  threads:
+    virtual:
+      enabled: true               # Virtual threads no Java 21
+
+server:
+  port: ${APP_PORT:8080}
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:changeme-secret-de-pelo-menos-256-bits-aqui-ok}
+    expiration-ms: ${APP_JWT_EXPIRATION_MS:900000}          # 15 min
+    refresh-expiration-ms: ${APP_JWT_REFRESH_EXPIRATION_MS:2592000000} # 30 dias
+
+  mangadex:
+    base-url: ${MANGADEX_BASE_URL:https://api.mangadex.org}
+    at-home-cache-ttl-minutes: ${MANGADEX_AT_HOME_CACHE_TTL_MINUTES:14}
