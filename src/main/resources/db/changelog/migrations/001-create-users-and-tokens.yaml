@@ -1,0 +1,106 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-users
+      author: seuusuario
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  name: username
+                  type: VARCHAR(50)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: preferred_lang
+                  type: VARCHAR(10)
+                  defaultValue: "pt"
+              - column:
+                  name: image_quality
+                  type: VARCHAR(20)
+                  defaultValue: "data-saver"
+              - column:
+                  name: reader_direction
+                  type: VARCHAR(20)
+                  defaultValue: "vertical"
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: NOW()
+              - column:
+                  name: updated_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: NOW()
+
+  - changeSet:
+      id: 001-create-refresh-tokens
+      author: seuusuario
+      changes:
+        - createTable:
+            tableName: refresh_tokens
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                  defaultValueComputed: gen_random_uuid()
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_refresh_tokens_user
+                    references: users(id)
+                    deleteCascade: true
+              - column:
+                  name: token
+                  type: VARCHAR(512)
+                  constraints:
+                    unique: true
+                    nullable: false
+              - column:
+                  name: expires_at
+                  type: TIMESTAMPTZ
+                  constraints:
+                    nullable: false
+              - column:
+                  name: revoked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMPTZ
+                  defaultValueComputed: NOW()
+        - createIndex:
+            tableName: refresh_tokens
+            indexName: idx_refresh_tokens_user
+            columns:
+              - column:
+                  name: user_id
+        - createIndex:
+            tableName: refresh_tokens
+            indexName: idx_refresh_tokens_token
+            columns:
+              - column:
+                  name: token
