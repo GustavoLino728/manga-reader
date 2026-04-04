@@ -7,19 +7,23 @@ import java.time.Instant;
 import java.util.UUID;
 
 public record LibraryEntryResponse(
-    UUID id,
-    String mangaId,
-    LibraryStatus status,
-    Instant createdAt,
-    Instant updatedAt
+        UUID id,
+        String mangaId,
+        String title,
+        String coverUrl,
+        LibraryStatus status,
+        Instant createdAt,
+        Instant updatedAt
 ) {
     public static LibraryEntryResponse from(LibraryEntry entry) {
         return new LibraryEntryResponse(
-            entry.getId(),
-            entry.getMangaId(),
-            entry.getStatus(),
-            entry.getCreatedAt(),
-            entry.getUpdatedAt()
+                entry.getId(),
+                entry.getMangaId(),
+                entry.getTitle(),
+                entry.getCoverUrl(),
+                entry.getStatus(),
+                entry.getCreatedAt(),
+                entry.getUpdatedAt()
         );
     }
 }

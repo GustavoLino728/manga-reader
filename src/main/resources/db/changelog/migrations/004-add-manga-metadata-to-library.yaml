@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-add-manga-metadata-to-library
+      author: gustavo
+      changes:
+        - addColumn:
+            tableName: library
+            columns:
+              - column:
+                  name: title
+                  type: varchar(500)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: cover_url
+                  type: varchar(500)
+                  constraints:
+                    nullable: true

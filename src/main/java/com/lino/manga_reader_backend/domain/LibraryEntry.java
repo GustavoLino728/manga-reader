@@ -37,6 +37,12 @@ public class LibraryEntry {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(length = 500)
+    private String title;
+
+    @Column(name = "cover_url", length = 500)
+    private String coverUrl;
+
     @PrePersist
     void onCreate() {
         createdAt = Instant.now();

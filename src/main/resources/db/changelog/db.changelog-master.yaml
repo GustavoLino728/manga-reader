@@ -3,3 +3,4 @@ databaseChangeLog:
       file: db/changelog/migrations/001-create-users-and-tokens.yaml
       file: db/changelog/migrations/002-create-library.yaml
       file: db/changelog/migrations/003-create-reading-progress.yaml
+      file: db/changelog/migrations/004-add-manga-metadata-to-library.yaml

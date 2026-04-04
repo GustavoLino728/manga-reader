@@ -21,6 +21,7 @@ import java.util.UUID;
 public class LibraryService {
 
     private final LibraryRepository libraryRepository;
+    private final MangaService mangaService;
 
     public List<LibraryEntryResponse> getLibrary(UUID userId, LibraryStatus status) {
         List<LibraryEntry> entries = status != null
@@ -35,11 +36,22 @@ public class LibraryService {
         if (libraryRepository.existsByUserIdAndMangaId(userId, req.mangaId()))
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Manga já está na biblioteca");
 
+        String title = null;
+        String coverUrl = null;
+        try {
+            var manga = mangaService.getById(req.mangaId(), "pt-br");
+            title = manga.title();
+            coverUrl = manga.coverUrl();
+        } catch (Exception e) {
+        }
+
         var entry = LibraryEntry.builder()
-            .user(user)
-            .mangaId(req.mangaId())
-            .status(req.status() != null ? req.status() : LibraryStatus.PLAN_TO_READ)
-            .build();
+                .user(user)
+                .mangaId(req.mangaId())
+                .status(req.status() != null ? req.status() : LibraryStatus.PLAN_TO_READ)
+                .title(title)
+                .coverUrl(coverUrl)
+                .build();
 
         return LibraryEntryResponse.from(libraryRepository.save(entry));
     }

@@ -12,11 +12,20 @@ public class WebClientConfig {
     @Bean
     public WebClient mangaDexClient() {
         return WebClient.builder()
-            .baseUrl("https://api.mangadex.org")
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .defaultHeader("User-Agent", "manga-reader-personal/1.0")
-            .codecs(config -> config.defaultCodecs()
-                .maxInMemorySize(2 * 1024 * 1024)) // 2MB buffer
-            .build();
+                .baseUrl("https://api.mangadex.org")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader("User-Agent", "manga-reader-personal/1.0")
+                .codecs(config -> config.defaultCodecs()
+                        .maxInMemorySize(2 * 1024 * 1024))
+                .build();
+    }
+
+    @Bean
+    public WebClient imageClient() {
+        return WebClient.builder()
+                .defaultHeader("User-Agent", "manga-reader-personal/1.0")
+                .codecs(config -> config.defaultCodecs()
+                        .maxInMemorySize(10 * 1024 * 1024)) // 10MB para imagens
+                .build();
     }
 }
